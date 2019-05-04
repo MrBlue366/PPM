@@ -5,9 +5,9 @@
 using namespace std;
 
 
-string class_name[4];
-int class_options[4], class_amount, loop = 1, class_day_amount[4][4];
-char class_days[4][4][4];
+string class_name[5];
+int class_options[5], class_amount, loop = 1, class_day_amount[5][4], class_days_time[5][4][5][2];
+char class_days[5][4][5];
 ofstream outFile ("timetable.txt");
 
 
@@ -65,40 +65,40 @@ void className() //Prompts name of classes
 	cout << endl;
 }
 
-void lessonsPerClass() //Prompts how many lectures and labs a class has per week
+void lessonsPerClass() //Prompts how many unique sessions a class has per week
 {
 
 	outFile << "\n";
 	for (int m = 0; m < class_amount; m++) // Number of lessons per class
 	{
-		cout << "How many lectures and labs(combined) does " << class_name[m] << " have a week?: ";
+		cout << "How many unique sessions (lecture, lab, tutor session, ect.) does " << class_name[m] << " have a week?: ";
 		cin >> class_options[m];
-		while (class_options[m] < 0)
+		while (class_options[m] < 0 || class_options[m] > 4) // Checks for incorrect input.
 		{
-			cout << "The amount you have entered is invalid, try again: ";
+			cout << "The amount you have entered is invalid. Input from 0 to 4 unique sessions, try again: ";
 			cin >> class_options[m];
 		}
-		outFile << "Lectures and labs per week for " <<class_name[m] <<": " << class_options[m] << endl;
+		outFile << "Unique sessions per week for " <<class_name[m] <<": " << class_options[m] << endl;
 	}
 }
 
-void lecturesLabs() //Prompts for how many days a class has lectures and how many days a class has labs
+void lecturesLabs() //Prompts for how many days a class has for each unique session
 {
 
 	for (int x = 0; x < class_amount; x++) // Retrieves number of days per week for each class.
 	{
 		cout << endl << "Class #" << x + 1 << " has " << class_options[x] << " options." << endl;
 
-		cout << "\n(Please enter the value for lectures first and then labs)" << endl;
+		cout << "\n(Please enter the value for lectures first, then labs and then other sessions )" << endl;
 		for (int y = 0; y < class_options[x]; y++)
 		{
-			cout << "How many days a week does class #" << x + 1 << " (" << class_name[x] << ") Option #" << y + 1 << " have: ";
-			cin >> class_day_amount[x][y];
+			cout << "How many days a week does class #" << x + 1 << " (" << class_name[x] << ") session #" << y + 1 << " have: ";
+			cin >> class_day_amount[x][y]; //max 5 for the class_days
 			while (loop == 1) // Checks for incorrect input.
 			{
-				if (class_day_amount[x][y] < 1)
+				if (class_day_amount[x][y] < 1 || class_day_amount[x][y] > 5)
 				{
-					cout << "The amount you entered was not operable, try again: ";
+					cout << "The amount you have entered is invalid. Input from 1 to 5 day(s) a week per unique session, try again: ";
 					cin >> class_day_amount[x][y];
 				}
 				else
@@ -115,7 +115,7 @@ void lecturesLabs() //Prompts for how many days a class has lectures and how man
 	loop = 1; // Resets while loop.
 }
 
-void dayForClass() //Prompts for the day of each class
+void dayForClass() //Prompts for the day+time of each class
 {
 	outFile << "\n";
 	cout << endl << "Monday = M. Tuesday = T. Wednesday = W. Thursday = H. Friday = F." << endl;
@@ -123,11 +123,10 @@ void dayForClass() //Prompts for the day of each class
 	for (int x = 0; x < class_amount; x++) // Retrieves the specific days per week for each class.
 	{
 		cout << endl << "Prompting for information on class #" << x + 1 << " (" << class_name[x] << ").";
-
+		cout << "\n(Please enter the days for lectures first, then labs and then other sessions )" << endl;
 		for (int y = 0; y < class_options[x]; y++)
 		{
-			cout << endl << "Prompting for information on Option #" << y + 1 << " of the above class.";
-
+			cout << endl << "Prompting for information on session #" << y + 1 << " of the above class.";
 			for (int z = 0; z < class_day_amount[x][y]; z++)
 			{
 				cout << endl << "Type the hot key for Day #" << z + 1 << " and press <Enter>: ";
@@ -156,13 +155,39 @@ void dayForClass() //Prompts for the day of each class
 						cin >> class_days[x][y][z];
 						break;
 					}
-
 				}
-				outFile << "Lectures and Labs for " << class_name[x] << " on: "<< class_days[x][y][z] << endl;
+				loop = 1; // Reset loop.
+
+				cout << endl << "Type the time this session starts and press <Enter>: (24-hr standard)";
+				cin >> class_days_time[x][y][z][0];
+				while (loop == 1)
+				{
+					if (class_days_time[x][y][z][0] < 9 || class_days_time[x][y][z][0]>17)
+					{
+						cout << "The amount you have entered is invalid. Input from 9 to 17 (24-hr standard), try again: ";
+						cin >> class_days_time[x][y][z][0];
+					}
+					else loop = 0;
+				}
+				loop = 1; // Reset loop.
+
+				cout << endl << "Type the time this session ends and press <Enter>: (24-hr standard)";
+				cin >> class_days_time[x][y][z][1];
+				while (loop == 1)
+				{
+					if (class_days_time[x][y][z][1] < 10 || class_days_time[x][y][z][1]>18 || class_days_time[x][y][z][0] >= class_days_time[x][y][z][1])
+					{
+						cout << "The amount you have entered is invalid. Input from 10 to 18 (24-hr standard) and must be after the session starts, try again: ";
+						cin >> class_days_time[x][y][z][1];
+					}
+					else loop = 0;
+				}
+				loop = 1; // Reset loop.
+
+				outFile << "Session #" << class_options[x] << " for " << class_name[x] << " on: " << class_days[x][y][z] << " from " << class_days_time[x][y][z][0] << " to " << class_days_time[x][y][z][1] << endl;
 			}
 		}
 	}
-	loop = 1; // Reset loop.
 }
 
 void getData() //Displays the days for each class
@@ -174,34 +199,39 @@ void getData() //Displays the days for each class
 
 		for (int y = 0; y < class_options[x]; y++)
 		{
-			cout << endl << "Prompting for information on Option #" << y + 1 << " of the above class.";
-
+			cout << endl << "Prompting for information on session #" << y + 1 << " of the above class.";
+			cout << endl << "Days for above session and class: ";
 			for (int z = 0; z < class_day_amount[x][y]; z++)
 			{
 				switch (toupper(class_days[x][y][z]))
 				{
 				case 'M':
-					cout << "Monday of the above option and class.";
+					cout << "Monday ";
 					break;
 				case 'T':
-					cout << "Tuesday of the above option and class.";
+					cout << "Tuesday ";
 					break;
 				case 'W':
-					cout << "Wednesday of the above option and class.";
+					cout << "Wednesday ";
 					break;
 				case 'H':
-					cout << "Thursday of the above option and class.";
+					cout << "Thursday ";
 					break;
 				case 'F':
-					cout << "Friday of the above option and class.";
+					cout << "Friday ";
 					break;
 				default:
 					break;
 				}
-				for (int v = 0; v < class_days[x][y][z]; v++)
+				// Retrieval of time.
+				cout << "[" << class_days_time[x][y][z][0] << "-" << class_days_time[x][y][z][1] << "]";
+
+				if ((z + 1) == class_day_amount[x][y])
 				{
-					// Retrieval of time.
+					cout << ".";
 				}
+				else
+					cout << ", ";
 			}
 		}
 	}
