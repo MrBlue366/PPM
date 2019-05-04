@@ -290,7 +290,7 @@ int main()
 	cout << "-------------------------------------------------------------------------------" << endl;
 	readFile();
 	cout << "-------------------------------------------------------------------------------" << endl;
-	cout << "Would you like to input another week(Y/N)? " << endl;
+	cout << "Would you like to input another student's timetable? (Y/N) " << endl;
 	cin >> add;
 	add = toupper(add);
 
