@@ -279,7 +279,7 @@ void dayForClass() //Prompts for the day+time of each class
 						}
 						if (loop == 0)
 						{
-							for (int y_2 = 0; y_2 <= y; y++)//conflict detection with current class
+							for (int y_2 = 0; y_2 < y; y++)//conflict detection with current class
 							{
 								/*if (y_2 == y)
 								{
