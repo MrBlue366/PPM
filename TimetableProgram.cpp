@@ -163,6 +163,7 @@ void dayForClass() //Prompts for the day+time of each class
 				cin >> class_days_time[x][y][z][0];
 				while (loop == 1)
 				{
+					cout << "1";
 					loop = 0;
 					if (class_days_time[x][y][z][0] < 9 || class_days_time[x][y][z][0] > 17)
 					{
@@ -172,8 +173,10 @@ void dayForClass() //Prompts for the day+time of each class
 					}
 					else //conflict detection
 					{
+						cout << "2";
 						for (int x_2 = 0; x_2 < x; x_2++)//conflict detection with other classes
 						{
+							cout << "3";
 							for (int y_2 = 0; y_2 < class_options[x_2]; y_2++)
 							{
 								for (int z_2 = 0; z_2 < class_day_amount[x_2][y_2]; z_2++)
@@ -195,10 +198,13 @@ void dayForClass() //Prompts for the day+time of each class
 						}
 						if (loop == 0)
 						{
+							cout << "4";
 							for (int y_2 = 0; y_2 <= y; y++)//conflict detection with current class
 							{
+								cout << "5";
 								if (y_2 == y)
 								{
+									cout << "6";
 									for (int z_2 = 0; z_2 < z; z_2++)
 									{
 										if (class_days[x][y][z] == class_days[x][y_2][z_2])
@@ -215,6 +221,7 @@ void dayForClass() //Prompts for the day+time of each class
 								}
 								else
 								{
+									cout << "7";
 									for (int z_2 = 0; z_2 < class_day_amount[x][y_2]; z_2++)
 									{
 										if (class_days[x][y][z] == class_days[x][y_2][z_2])
