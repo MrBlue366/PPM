@@ -281,7 +281,7 @@ void dayForClass() //Prompts for the day+time of each class
 						{
 							for (int y_2 = 0; y_2 <= y; y++)//conflict detection with current class
 							{
-								if (y_2 == y)
+								/*if (y_2 == y)
 								{
 									for (int z_2 = 0; z_2 < z; z_2++)
 									{
@@ -296,9 +296,9 @@ void dayForClass() //Prompts for the day+time of each class
 											}
 										}
 									}
-								}
-								else
-								{
+								}*/
+								//else
+								//{
 									for (int z_2 = 0; z_2 < class_day_amount[x][y_2]; z_2++)
 									{
 										if (class_days[x][y][z] == class_days[x][y_2][z_2])
@@ -313,7 +313,7 @@ void dayForClass() //Prompts for the day+time of each class
 											}
 										}
 									}
-								}
+								//}
 							}
 						}
 					}
