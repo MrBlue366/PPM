@@ -118,6 +118,7 @@ void lecturesLabs() //Prompts for how many days a class has for each unique sess
 void dayForClass() //Prompts for the day+time of each class
 {
 	outFile << "\n";
+	outFile << "--";
 	cout << endl << "Monday = M. Tuesday = T. Wednesday = W. Thursday = H. Friday = F." << endl;
 
 	for (int x = 0; x < class_amount; x++) // Retrieves the specific days per week for each class.
@@ -162,12 +163,76 @@ void dayForClass() //Prompts for the day+time of each class
 				cin >> class_days_time[x][y][z][0];
 				while (loop == 1)
 				{
-					if (class_days_time[x][y][z][0] < 9 || class_days_time[x][y][z][0]>17)
+					loop = 0;
+					if (class_days_time[x][y][z][0] < 9 || class_days_time[x][y][z][0] > 17)
 					{
 						cout << "The amount you have entered is invalid. Input from 9 to 17 (24-hr standard), try again: ";
 						cin >> class_days_time[x][y][z][0];
+						loop = 1;
 					}
-					else loop = 0;
+					else //conflict detection
+					{
+						for (int x_2 = 0; x_2 < x; x_2++)//conflict detection with other classes
+						{
+							for (int y_2 = 0; y_2 < class_options[x_2]; y_2++)
+							{
+								for (int z_2 = 0; z_2 < class_day_amount[x_2][y_2]; z_2++)
+								{
+									if (class_days[x][y][z] == class_days[x_2][y_2][z_2])
+									{
+										if (class_days_time[x][y][z][0] >= class_days_time[x_2][y_2][z_2][0] && class_days_time[x][y][z][0] < class_days_time[x_2][y_2][z_2][1])
+										{
+											cout << "The time you have entered conflicts with " << class_name[x_2] << " on " << class_days[x_2][y_2][z_2] << " [" << class_days_time[x_2][y_2][z_2][0] << "-" << class_days_time[x_2][y_2][z_2][1] << "]" << ", try again: ";
+											cin >> class_days_time[x][y][z][0];
+											loop = 1;
+											z_2 = class_day_amount[x_2][y_2];
+											y_2 = class_options[x_2];
+											x_2 = x;
+										}
+									}
+								}
+							}
+						}
+						if (loop == 0)
+						{
+							for (int y_2 = 0; y_2 <= y; y++)//conflict detection with current class
+							{
+								if (y_2 == y)
+								{
+									for (int z_2 = 0; z_2 < z; z_2++)
+									{
+										if (class_days[x][y][z] == class_days[x][y_2][z_2])
+										{
+											if (class_days_time[x][y][z][0] >= class_days_time[x][y_2][z_2][0] && class_days_time[x][y][z][0] < class_days_time[x][y_2][z_2][1])
+											{
+												cout << "The amount you have entered conflicts with " << class_name[x] << " on " << class_days[x][y_2][z_2] << " [" << class_days_time[x][y_2][z_2][0] << "-" << class_days_time[x][y_2][z_2][1] << "]" << ", try again: ";
+												cin >> class_days_time[x][y][z][0];
+												loop = 1;
+												z_2 = z;
+											}
+										}
+									}
+								}
+								else
+								{
+									for (int z_2 = 0; z_2 < class_day_amount[x][y_2]; z_2++)
+									{
+										if (class_days[x][y][z] == class_days[x][y_2][z_2])
+										{
+											if (class_days_time[x][y][z][0] >= class_days_time[x][y_2][z_2][0] && class_days_time[x][y][z][0] < class_days_time[x][y_2][z_2][1])
+											{
+												cout << "The amount you have entered conflicts with " << class_name[x] << " on " << class_days[x][y_2][z_2] << " [" << class_days_time[x][y_2][z_2][0] << "-" << class_days_time[x][y_2][z_2][1] << "]" << ", try again: ";
+												cin >> class_days_time[x][y][z][0];
+												loop = 1;
+												z_2 = class_day_amount[x][y_2];
+												y_2 = y + 1;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 				loop = 1; // Reset loop.
 
@@ -175,19 +240,102 @@ void dayForClass() //Prompts for the day+time of each class
 				cin >> class_days_time[x][y][z][1];
 				while (loop == 1)
 				{
+					loop = 0;
 					if (class_days_time[x][y][z][1] < 10 || class_days_time[x][y][z][1]>18 || class_days_time[x][y][z][0] >= class_days_time[x][y][z][1])
 					{
-						cout << "The amount you have entered is invalid. Input from 10 to 18 (24-hr standard) and must be after the session starts, try again: ";
+						cout << "The time you have entered is invalid. Input from 10 to 18 (24-hr standard) and must be after the session starts, try again: ";
 						cin >> class_days_time[x][y][z][1];
+						loop = 1;
 					}
-					else loop = 0;
+					else //conflict detection
+					{
+						for (int x_2 = 0; x_2 < x; x_2++)//conflict detection with other classes
+						{
+							for (int y_2 = 0; y_2 < class_options[x_2]; y_2++)
+							{
+								for (int z_2 = 0; z_2 < class_day_amount[x_2][y_2]; z_2++)
+								{
+									if (class_days[x][y][z] == class_days[x_2][y_2][z_2])
+									{
+										if (class_days_time[x][y][z][1] > class_days_time[x_2][y_2][z_2][0] && class_days_time[x][y][z][1] <= class_days_time[x_2][y_2][z_2][1])
+										{
+											cout << "The amount you have entered conflicts with " << class_name[x_2] << " on " << class_days[x_2][y_2][z_2] << " [" << class_days_time[x_2][y_2][z_2][0] << "-" << class_days_time[x_2][y_2][z_2][1] << "]" << ", try again: ";
+											cin >> class_days_time[x][y][z][1];
+											loop = 1;
+											z_2 = class_day_amount[x_2][y_2];
+											y_2 = class_options[x_2];
+											x_2 = x;
+										}
+									}
+								}
+							}
+						}
+						if (loop == 0)
+						{
+							for (int y_2 = 0; y_2 <= y; y++)//conflict detection with current class
+							{
+								if (y_2 == y)
+								{
+									for (int z_2 = 0; z_2 < z; z_2++)
+									{
+										if (class_days[x][y][z] == class_days[x][y_2][z_2])
+										{
+											if (class_days_time[x][y][z][1] > class_days_time[x][y_2][z_2][0] && class_days_time[x][y][z][1] <= class_days_time[x][y_2][z_2][1])
+											{
+												cout << "The amount you have entered conflicts with " << class_name[x] << " on " << class_days[x][y_2][z_2] << " [" << class_days_time[x][y_2][z_2][0] << "-" << class_days_time[x][y_2][z_2][1] << "]" << ", try again: ";
+												cin >> class_days_time[x][y][z][1];
+												loop = 1;
+												z_2 = z;
+											}
+										}
+									}
+								}
+								else
+								{
+									for (int z_2 = 0; z_2 < class_day_amount[x][y_2]; z_2++)
+									{
+										if (class_days[x][y][z] == class_days[x][y_2][z_2])
+										{
+											if (class_days_time[x][y][z][1] > class_days_time[x][y_2][z_2][0] && class_days_time[x][y][z][1] <= class_days_time[x][y_2][z_2][1])
+											{
+												cout << "The amount you have entered conflicts with " << class_name[x] << " on " << class_days[x][y_2][z_2] << " [" << class_days_time[x][y_2][z_2][0] << "-" << class_days_time[x][y_2][z_2][1] << "]" << ", try again: ";
+												cin >> class_days_time[x][y][z][1];
+												loop = 1;
+												z_2 = class_day_amount[x][y_2];
+												y_2 = y + 1;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 				loop = 1; // Reset loop.
-
-				outFile << "Session #" << class_options[x] << " for " << class_name[x] << " on: " << class_days[x][y][z] << " from " << class_days_time[x][y][z][0] << " to " << class_days_time[x][y][z][1] << endl;
+				outFile << "Session #" << class_options[x] << " for " << class_name[x] << " on: ";
+				switch (class_days[x][y][z])
+				{
+				case 'M':
+					outFile << "Monday ";
+					break;
+				case 'T':
+					outFile << "Tuesday ";
+					break;
+				case 'W':
+					outFile << "Wednesday ";
+					break;
+				case 'H':
+					outFile << "Thursday ";
+					break;
+				case 'F':
+					outFile << "Friday ";
+					break;
+				}
+				outFile << "from " << class_days_time[x][y][z][0] << " to " << class_days_time[x][y][z][1] << "." << endl;
 			}
 		}
 	}
+	outFile << "----------------";
 }
 
 void getData() //Displays the days for each class
@@ -240,7 +388,39 @@ void getData() //Displays the days for each class
 
 void printTimeTable()
 {
+	string sName;
+	string text;
 
+	cout << "Enter the name of the student: ";
+	cin >> sName;
+	cout << "/n/n";
+	ifstream inFile("timetable.txt");
+	if (inFile.is_open())
+	{
+		while (getline(inFile, text))
+		{
+			if (text == "Name of student: " + sName)
+			{
+				loop = 0;
+				while (getline(inFile, text))
+				{
+					if (text == "--")
+					{
+						while (text != "----------------")
+							cout << getline(inFile, text);
+						break;
+					}
+				}
+				break;
+			}
+		}
+		inFile.close();
+	}
+	if (loop != 0)
+	{
+		cout << "Student not found. Try again./n";
+		printTimeTable();
+	}
 }
 
 void readFile() //Reads from the file and displays the current stored data to the user
@@ -283,32 +463,33 @@ void timetableWeek() //all the functions called here to avoid messy main
 
 int main()
 {
-	char add;
-
-	timetableWeek();
+	int add;
 
 	cout << "-------------------------------------------------------------------------------" << endl;
-	readFile();
-	cout << "-------------------------------------------------------------------------------" << endl;
-	cout << "Would you like to input another student's timetable? (Y/N) " << endl;
+	cout << "Would you like to:/n/t1-Input a student's timetable./n/t2-View a student's timetable./n/t3-Exit." << endl;
+	cout << "/n/t";
 	cin >> add;
-	add = toupper(add);
 
-	while (add != 'Y' && add != 'N')
+	while (add != 1 && add != 2 && add != 3)
 	{
-		std::cout << "Please enter either 'Y' or 'N'!" << std::endl;
-		std::cout << "Would you like to input another week(Y/N)?  ";
-		std::cin >> add;
-		add = toupper(add);
+		std::cout << "Please enter either 1, 2 or 3!" << std::endl;
+		cout << "Would you like to:/n/t1-Input a student's timetable./n/t2-View a student's timetable./n/t3-Exit." << endl;
+		cout << "/n/t";
+		cin >> add;
 	}
-	if (add == 'Y')
+	if (add == 1)
 	{
 		outFile << "\n";
-		outFile << "----------------";
-		outFile << "\n";
+		timetableWeek();
+		cout << "-------------------------------------------------------------------------------" << endl;
+		readFile();
 		main(); //Recursion to allow for the addition of multiple weeks
 	}
-	else {
+	else if (add == 2)
+	{
+		printTimeTable();
+	}
+	else{
 		outFile.close();
 	}
 
