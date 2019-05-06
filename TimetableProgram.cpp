@@ -199,9 +199,9 @@ void dayForClass() //Prompts for the day+time of each class
 						if (loop == 0)
 						{
 							cout << "4";
-							for (int y_2 = 0; y_2 <= y; y++)//conflict detection with current class
+							for (int y_2 = 0; y_2 < y; y++)//conflict detection with current class
 							{
-								cout << "5";
+								/*cout << "5";
 								if (y_2 == y)
 								{
 									cout << "6";
@@ -218,9 +218,9 @@ void dayForClass() //Prompts for the day+time of each class
 											}
 										}
 									}
-								}
-								else
-								{
+								}*/
+								//else
+								//{
 									cout << "7";
 									for (int z_2 = 0; z_2 < class_day_amount[x][y_2]; z_2++)
 									{
@@ -236,7 +236,7 @@ void dayForClass() //Prompts for the day+time of each class
 											}
 										}
 									}
-								}
+								//}
 							}
 						}
 					}
@@ -400,7 +400,7 @@ void printTimeTable()
 
 	cout << "Enter the name of the student: ";
 	cin >> sName;
-	cout << "/n/n";
+	cout << "\n\n";
 	ifstream inFile("timetable.txt");
 	if (inFile.is_open())
 	{
@@ -430,7 +430,7 @@ void printTimeTable()
 	}
 	if (loop != 0)
 	{
-		cout << "Student not found. Try again./n";
+		cout << "Student not found. Try again.\n";
 		printTimeTable();
 	}
 }
@@ -475,18 +475,18 @@ void timetableWeek() //all the functions called here to avoid messy main
 
 int main()
 {
-	string add;
+	char add;
 
 	cout << "-------------------------------------------------------------------------------" << endl;
-	cout << "Would you like to:/n/t1-Input a student's timetable./n/t2-View a student's timetable./n/t3-Exit." << endl;
-	cout << "/n/t";
+	cout << "Would you like to:\n\t1-Input a student's timetable.\n\t2-View a student's timetable.\n\t3-Exit." << endl;
+	cout << "\n\t";
 	cin >> add;
 
 	while (add != '1' && add != '2' && add != '3')
 	{
 		std::cout << "Please enter either 1, 2 or 3!" << std::endl;
-		cout << "Would you like to:/n/t1-Input a student's timetable./n/t2-View a student's timetable./n/t3-Exit." << endl;
-		cout << "/n/t";
+		cout << "Would you like to:\n\t1-Input a student's timetable.\n\t2-View a student's timetable.\n\t3-Exit." << endl;
+		cout << "\n\t";
 		cin >> add;
 	}
 	if (add == '1')
