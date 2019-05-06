@@ -406,8 +406,13 @@ void printTimeTable()
 				{
 					if (text == "--")
 					{
-						while (text != "----------------")
-							cout << getline(inFile, text);
+						while (getline(inFile, text))
+						{
+							if (text != "----------------")
+								cout << text << '\n';
+							else
+								break;
+						}
 						break;
 					}
 				}
@@ -463,21 +468,21 @@ void timetableWeek() //all the functions called here to avoid messy main
 
 int main()
 {
-	int add;
+	string add;
 
 	cout << "-------------------------------------------------------------------------------" << endl;
 	cout << "Would you like to:/n/t1-Input a student's timetable./n/t2-View a student's timetable./n/t3-Exit." << endl;
 	cout << "/n/t";
 	cin >> add;
 
-	while (add != 1 && add != 2 && add != 3)
+	while (add != '1' && add != '2' && add != '3')
 	{
 		std::cout << "Please enter either 1, 2 or 3!" << std::endl;
 		cout << "Would you like to:/n/t1-Input a student's timetable./n/t2-View a student's timetable./n/t3-Exit." << endl;
 		cout << "/n/t";
 		cin >> add;
 	}
-	if (add == 1)
+	if (add == '1')
 	{
 		outFile << "\n";
 		timetableWeek();
@@ -485,7 +490,7 @@ int main()
 		readFile();
 		main(); //Recursion to allow for the addition of multiple weeks
 	}
-	else if (add == 2)
+	else if (add == '2')
 	{
 		printTimeTable();
 	}
